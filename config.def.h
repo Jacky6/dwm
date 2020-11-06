@@ -57,45 +57,45 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "alacritty", NULL };    /* 定义alacritty终端的快捷建功能 */
+static const char *volup[] = { "amixer", "-qM", "set", "Master", "2%+", "umute", NULL };
+static const char *voldown[] = { "amixer", "-qM", "set", "Master", "2%-", "umute", NULL };   // 定义系统音量大小调节的快捷键功能
+static const char *lightup[] = { "xbacklight", "-inc", "2", NULL };
+static const char *lightdown[] = { "xbacklight", "-dec", "2", NULL };   //   定义屏幕亮度调节的快捷键功能
+static const char *chromium[]  = { "chromium", "--disk-cache-dir=/tmp/chromium", NULL };   //   定义chromium浏览器的快捷键功能
+static const char *dolphin[]  = { "dolphin", NULL };   //  定义dolphin文件管理器的快捷键功能
 
+// XK_ 是指Alt键
 static Key keys[] = {
-	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_Return, zoom,           {0} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+        /* modifier                     key        function        argument */
+        { MODKEY|ShiftMask,             XK_Up,     spawn,          {.v = lightup} },
+        { MODKEY|ShiftMask,             XK_Down,   spawn,          {.v = lightdown} },   // Shift+Alt+上/下方向键，调整屏幕亮度
+        { MODKEY|ShiftMask,             XK_Right,  spawn,          {.v = volup} },
+        { MODKEY|ShiftMask,             XK_Left,   spawn,          {.v = voldown} },     // Shift+Alt+左/右方向键，调整音量大小
+        { MODKEY|ShiftMask,             XK_m,      spawn,          {.v = mute} },        // Shift+Alt+m，开启/关闭静音
+        { MODKEY,                       XK_d,      spawn,          {.v = dolphin } },    // Alt+d，呼出dolphin文件管理器
+        { MODKEY,                       XK_j,      spawn,          {.v = chromium } },   // Alt+j，呼出chromium浏览器
+        { MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },   // Alt+p，呼出dmenu应用程序启动器
+        { MODKEY,                       XK_k,      spawn,          {.v = termcmd } },    // Alt+k，呼出alacritty终端
+        { MODKEY,                       XK_Up,     focusstack,     {.i = +1 } },
+        { MODKEY,                       XK_Down,   focusstack,     {.i = -1 } },         // Alt+上/下方向键，切换focus到不同的程序窗口
+        { MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
+        { MODKEY,                       XK_u,      incnmaster,     {.i = -1 } },         // Alt+i/u，改变窗口布局
+        { MODKEY,                       XK_Left,   setmfact,       {.f = -0.05} },
+        { MODKEY,                       XK_Right,  setmfact,       {.f = +0.05} },       // Alt+左/右方向键，调整程序窗口的大小
+        { MODKEY,                       XK_Return, zoom,           {0} },                // Alt+Enter键，将当前所在focus的窗口提升为主窗口(左边那个占比最大的窗口就是“主窗口”)
+        { MODKEY|ControlMask,           XK_q,      killclient,     {0} },   // Ctrl+Alt+q，关闭并退出将当前所在focus的窗口程序
+        { MODKEY|ControlMask,           XK_Delete,    quit,        {0} },   // Ctrl+Alt+del，关闭并退出整个dwm桌面，且强制关闭所有当前运行于dwm下的程序
+        TAGKEYS(                        XK_1,                      0)
+        TAGKEYS(                        XK_2,                      1)
+        TAGKEYS(                        XK_3,                      2)
+        TAGKEYS(                        XK_4,                      3)
+        TAGKEYS(                        XK_5,                      4)
+        TAGKEYS(                        XK_6,                      5)
+        TAGKEYS(                        XK_7,                      6)
+        TAGKEYS(                        XK_8,                      7)
+        TAGKEYS(                        XK_9,                      8)   //  Alt+1/2/3/4/5/6/7/8/9，切换到不同的dwm顶部菜单栏的标签里
 };
-
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
