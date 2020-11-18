@@ -3,8 +3,8 @@
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
-static const int showbar            = 2;        /* 0 means no bar */
-static const int topbar             = 2;        /* 0 means bottom bar */
+static const int showbar            = 1;        /* 0 means no bar */
+static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "monospace:size=14" };
 static const char dmenufont[]       = "monospace:size=14";
 static const char col_gray1[]       = "#222222";
@@ -12,10 +12,17 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
+static const unsigned int baralpha = 0xd0;
+static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+};
+static const unsigned int alphas[][3]      = {
+	/*               fg      bg        border     */
+	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
+	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
 
 /* tagging */
@@ -57,8 +64,15 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "konsole", NULL };
+static const char *termcmd[]  = { "konsole", NULL };    /* 定义alacritty终端的快捷建功能 */
+static const char *volup[] = { "amixer", "-qM", "set", "Master", "2%+", "umute", NULL };
+static const char *voldown[] = { "amixer", "-qM", "set", "Master", "2%-", "umute", NULL };   // 定义系统音量大小调节的快捷键功能
+static const char *lightup[] = { "xbacklight", "-inc", "2", NULL };
+static const char *lightdown[] = { "xbacklight", "-dec", "2", NULL };   //   定义屏幕亮度调节的快捷键功能
+static const char *chromium[]  = { "chromium", "--disk-cache-dir=/tmp/chromium", NULL };   //   定义chromium浏览器的快捷键功能
+static const char *dolphin[]  = { "dolphin", NULL };   //  定义dolphin文件管理器的快捷键功能
 
+// XK_ 是指Alt键
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
@@ -70,7 +84,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
+	{ MODKEY|ShiftMask,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_w,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
@@ -112,4 +126,3 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-
