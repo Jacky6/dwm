@@ -1428,7 +1428,7 @@ runautostart(void)
 			free(pathpfx);
 			return;
 		}
-	}
+	} // pathpfx = home/chao/dwm
 
 	/* check if the autostart script directory exists */
 	if (! (stat(pathpfx, &sb) == 0 && S_ISDIR(sb.st_mode))) {
@@ -1449,23 +1449,23 @@ runautostart(void)
 	}
 
 	/* try the blocking script first */
-	path = ecalloc(1, strlen(pathpfx) + strlen(autostartblocksh) + 2);
-	if (sprintf(path, "%s/%s", pathpfx, autostartblocksh) <= 0) {
+	path = ecalloc(1, strlen(pathpfx) + strlen(autostartblocksh) + 2); // 	
+	if (sprintf(path, "%s/%s", pathpfx, autostartblocksh) <= 0) {  // path = home/chao/dwm/autostart_blocking.sh
 		free(path);
 		free(pathpfx);
 	}
 
 	if (access(path, X_OK) == 0)
-		system(path);
+		system(path); // 执行autostart_blocking.sh
 
 	/* now the non-blocking script */
-	if (sprintf(path, "%s/%s", pathpfx, autostartsh) <= 0) {
+	if (sprintf(path, "%s/%s", pathpfx, autostartsh) <= 0) { // path = home/chao/dwm/autostart.sh
 		free(path);
 		free(pathpfx);
 	}
 
 	if (access(path, X_OK) == 0)
-		system(strcat(path, " &"));
+		system(strcat(path, " &")); // 执行autostart.sh
 
 	free(pathpfx);
 	free(path);
