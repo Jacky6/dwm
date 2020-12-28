@@ -64,7 +64,7 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "konsole", NULL };    /* 定义alacritty终端的快捷建功能 */
+static const char *termcmd[]  = { "st", NULL };    /* 定义alacritty终端的快捷建功能 */
 static const char *volup[] = { "amixer", "-qM", "set", "Master", "2%+", "umute", NULL };
 static const char *voldown[] = { "amixer", "-qM", "set", "Master", "2%-", "umute", NULL };   // 定义系统音量大小调节的快捷键功能
 static const char *lightup[] = { "xbacklight", "-inc", "2", NULL };
